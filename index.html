@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enough Gold</title>
+<meta name="description" content="19Keys × High Lvl operating deck: three focuses, one weekly rhythm, the running decision board.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#0B0D12; --bg2:#10131A;
+  --glass:rgba(255,255,255,.055); --glass2:rgba(255,255,255,.09); --edge:rgba(255,255,255,.13); --edge2:rgba(255,255,255,.24);
+  --ink:#F5F7FA; --silver:#B9C0CC; --muted:#7E8698;
+  --red:#E8302A; --red2:#FF5A4F; --red-soft:rgba(232,48,42,.16); --red-glow:0 0 40px rgba(232,48,42,.35);
+  --ok:#3DD68C; --ok-soft:rgba(61,214,140,.14); --amber:#F5B940; --amber-soft:rgba(245,185,64,.14);
+  --display:'Inter Tight',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+  --body:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --r:18px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--edge2)}
+a:hover{border-bottom-color:var(--red2)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--red2);outline-offset:3px}
+
+/* ambient light */
+.orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;will-change:transform}
+.o1{width:640px;height:640px;left:-180px;top:-200px;background:radial-gradient(circle,rgba(232,48,42,.55),transparent 65%);animation:drift 26s ease-in-out infinite alternate}
+.o2{width:720px;height:720px;right:-260px;top:30vh;background:radial-gradient(circle,rgba(185,192,204,.28),transparent 65%);animation:drift 32s ease-in-out infinite alternate-reverse}
+.o3{width:520px;height:520px;left:30vw;bottom:-260px;background:radial-gradient(circle,rgba(232,48,42,.32),transparent 65%);animation:drift 38s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(60px,40px,0) scale(1.08)}}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1px);background-size:3px 3px;opacity:.5}
+@media (prefers-reduced-motion:reduce){.orb{animation:none}html{scroll-behavior:auto}.reveal{opacity:1!important;transform:none!important}}
+
+/* frame */
+.shell{position:relative;z-index:1;display:grid;grid-template-columns:232px minmax(0,1fr);max-width:1400px;margin:0 auto}
+.rail{position:sticky;top:0;height:100vh;padding:32px 18px 32px 28px;display:flex;flex-direction:column;gap:26px}
+.brand{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.brand b{display:block;color:var(--ink);font-weight:500;margin-top:6px}
+.rail nav{display:flex;flex-direction:column;gap:3px}
+.rail nav a{display:grid;grid-template-columns:26px 1fr;gap:8px;padding:8px 10px;border:1px solid transparent;border-radius:10px;color:var(--silver);font-size:13px;font-weight:500;line-height:1.25;transition:background .2s,border-color .2s,color .2s}
+.rail nav a span{font-family:var(--mono);font-size:10.5px;color:var(--muted);padding-top:2px}
+.rail nav a:hover{background:var(--glass);color:var(--ink)}
+.rail nav a.active{background:var(--glass2);border-color:var(--edge);color:var(--ink);backdrop-filter:blur(12px)}
+.rail nav a.active span{color:var(--red2)}
+.rail .meta{margin-top:auto;font-family:var(--mono);font-size:10.5px;color:var(--muted);line-height:1.8}
+main{padding:0 56px 120px;min-width:0}
+.wrap{max-width:1080px}
+
+/* glass primitives */
+.glass{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 20px 50px rgba(0,0,0,.35);position:relative}
+.glass.hot{border-color:rgba(232,48,42,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),var(--red-glow)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);color:var(--silver);white-space:nowrap}
+.chip.red{border-color:rgba(232,48,42,.5);background:var(--red-soft);color:#FF8A82}
+.chip.ok{border-color:rgba(61,214,140,.4);background:var(--ok-soft);color:#7BE8B0}
+.chip.amber{border-color:rgba(245,185,64,.4);background:var(--amber-soft);color:#FFD37A}
+.chip.silver{background:rgba(255,255,255,.12);color:var(--ink);border-color:var(--edge2)}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 10px currentColor}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--red2);margin:0 0 18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--red2);box-shadow:0 0 8px var(--red2)}
+
+/* hero */
+.hero{padding:76px 0 60px}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(54px,7.6vw,108px);line-height:.93;letter-spacing:-.045em;margin:0 0 26px;text-wrap:balance}
+.hero h1 .s{background:linear-gradient(180deg,#FFFFFF 0%,#C9CFD9 55%,#8F97A6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 .r{color:var(--red);text-shadow:0 0 50px rgba(232,48,42,.45)}
+.hero .lede{font-size:19px;color:var(--silver);max-width:560px;margin:0 0 40px;text-wrap:pretty;font-weight:500}
+.focus3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.focus3 .glass{padding:24px 24px 22px;transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .3s}
+.focus3 .glass:hover{transform:translateY(-4px);border-color:var(--edge2)}
+.focus3 .k{font-family:var(--display);font-weight:800;font-size:44px;letter-spacing:-.04em;line-height:1;color:var(--red);margin:0 0 14px}
+.focus3 h3{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.02em;margin:0 0 8px}
+.focus3 p{margin:0;color:var(--silver);font-size:14px;line-height:1.5}
+.focus3 .tag{position:absolute;top:18px;right:18px}
+
+/* chapters */
+.chapter{padding:88px 0 20px}
+.chapter+.chapter{border-top:1px solid var(--edge)}
+.chead{display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:start;margin-bottom:36px}
+.chead .num{font-family:var(--mono);font-size:12px;color:var(--red2);letter-spacing:.14em;padding-top:16px}
+.chead h2{font-family:var(--display);font-weight:800;font-size:clamp(36px,4.8vw,58px);line-height:.98;letter-spacing:-.04em;margin:0 0 12px;text-wrap:balance}
+.chead p{margin:0;color:var(--silver);font-size:17px;max-width:58ch;font-weight:500}
+h3.sub{font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:-.025em;margin:48px 0 16px}
+h4.lab{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:32px 0 12px}
+p.note{color:var(--silver);max-width:64ch;margin:14px 0 0;font-size:15px}
+strong{color:var(--ink);font-weight:700}
+.reveal{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.pre{opacity:.001;transform:translateY(18px)}
+
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{padding:20px 22px 18px}
+.kpi b{display:block;font-family:var(--display);font-weight:800;font-size:44px;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.kpi.red b{color:var(--red);text-shadow:0 0 30px rgba(232,48,42,.4)}
+.kpi small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:10px;line-height:1.5}
+.kpi .bar{height:3px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:14px;overflow:hidden}
+.kpi .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--red2));box-shadow:0 0 12px var(--red);border-radius:2px}
+
+/* cards grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:stretch}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:stretch}
+.card{padding:22px 24px}
+.card h5{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--red2);margin:0 0 12px}
+.card h5.sv{color:var(--silver)}
+.card p{font-size:14.5px;margin:0 0 8px;color:var(--silver)}
+.card ul{font-size:14.5px;margin:0;padding-left:0;list-style:none;color:var(--silver)}
+.card li{padding:9px 0;border-top:1px solid var(--edge);display:flex;gap:10px;align-items:flex-start}
+.card li:first-child{border-top:0;padding-top:0}
+.card li::before{content:"";flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red);margin-top:8px}
+.card .big{font-family:var(--display);font-weight:800;font-size:38px;letter-spacing:-.04em;line-height:1;margin:2px 0 10px}
+
+/* roles + meeting */
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.roles .card h5{margin-bottom:4px}
+.roles .who{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.03em;margin:0 0 12px}
+.agenda{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px}
+.agenda .card{padding:18px 18px 16px}
+.agenda .t{font-family:var(--mono);font-size:11px;color:var(--red2);letter-spacing:.08em}
+.agenda .n{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.02em;margin:8px 0 6px}
+.agenda p{font-size:13px;margin:0;color:var(--silver);line-height:1.45}
+.rules{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+
+/* value ladder */
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:end}
+.ladder .step{padding:16px 16px 14px;display:flex;flex-direction:column;justify-content:flex-end;transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.ladder .step:hover{transform:translateY(-4px)}
+.ladder .s1{min-height:120px}.ladder .s2{min-height:150px}.ladder .s3{min-height:180px}.ladder .s4{min-height:210px}.ladder .s5{min-height:240px}
+.ladder .price{font-family:var(--display);font-weight:800;font-size:34px;letter-spacing:-.04em;line-height:1}
+.ladder .s5 .price{color:var(--red);text-shadow:0 0 30px rgba(232,48,42,.4)}
+.ladder .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:8px 0 6px}
+.ladder p{font-size:12.5px;margin:0;color:var(--silver);line-height:1.4}
+
+/* offer stack */
+.stack{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stack .card{padding:20px}
+.stack .card h6{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.02em;margin:10px 0 6px}
+.stack .card p{font-size:13.5px;margin:0 0 12px}
+.stack .ico{width:38px;height:38px;border-radius:11px;background:linear-gradient(145deg,rgba(255,255,255,.18),rgba(255,255,255,.04));border:1px solid var(--edge2);display:grid;place-items:center;font-family:var(--mono);font-size:12px;color:var(--ink)}
+
+/* vertical timeline */
+.timeline{position:relative;margin:8px 0 0;padding-left:0}
+.timeline::before{content:"";position:absolute;left:171px;top:10px;bottom:10px;width:1px;background:linear-gradient(180deg,transparent,var(--edge2) 6%,var(--edge2) 94%,transparent)}
+.tl{display:grid;grid-template-columns:140px 62px 1fr;align-items:center;padding:0;margin:0 0 10px}
+.tl .m{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:right;padding-right:6px}
+.tl .m b{display:block;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.03em;color:var(--ink);text-transform:none}
+.tl .pt{display:grid;place-items:center}
+.tl .pt i{width:12px;height:12px;border-radius:50%;border:2px solid var(--silver);background:var(--bg)}
+.tl.set .pt i{background:var(--red);border-color:var(--red);box-shadow:0 0 0 5px rgba(232,48,42,.18),0 0 18px var(--red)}
+.tl .ev{padding:16px 20px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;transition:transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s}
+.tl .ev:hover{transform:translateX(4px);border-color:var(--edge2)}
+.tl .ev h6{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.025em;margin:0 0 3px}
+.tl .ev p{margin:0;font-size:13.5px;color:var(--silver)}
+.tl.open .ev{background:rgba(255,255,255,.03);border-style:dashed}
+.tl.open .ev h6{color:var(--silver);font-weight:600}
+
+/* sponsor tiers */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.tiers .card .big{font-size:40px}
+.tiers .card .big.red{color:var(--red);text-shadow:0 0 30px rgba(232,48,42,.4)}
+
+/* board */
+.boardhead{display:flex;justify-content:space-between;align-items:baseline;gap:20px;margin:36px 0 10px}
+.boardhead h4{margin:0}
+.boardhead small{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.08em}
+.board{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:26px 1fr auto;gap:14px;align-items:start;padding:16px 18px;transition:border-color .3s}
+.item:hover{border-color:var(--edge2)}
+.item input[type=checkbox]{appearance:none;width:20px;height:20px;border:1.5px solid var(--silver);border-radius:6px;margin:2px 0 0;cursor:pointer;background:transparent;position:relative;transition:background .2s,border-color .2s}
+.item input[type=checkbox]:checked{background:var(--red);border-color:var(--red);box-shadow:0 0 14px rgba(232,48,42,.5)}
+.item input[type=checkbox]:checked::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.item.done .title{text-decoration:line-through;color:var(--muted)}
+.item .title{font-family:var(--display);font-weight:700;font-size:16.5px;letter-spacing:-.015em}
+.item .why{font-size:13.5px;color:var(--silver);margin-top:4px;max-width:62ch}
+.item .own{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:.06em}
+.item .side{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+
+/* decisions */
+.decide{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.decide .card{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start}
+.decide .n{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.04em;color:var(--red);line-height:1}
+.decide b{display:block;font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.02em;margin-bottom:4px;color:var(--ink)}
+.decide p{margin:0;font-size:14px}
+.quote{font-family:var(--display);font-weight:800;font-size:clamp(30px,4vw,52px);letter-spacing:-.04em;line-height:1.05;margin:60px 0 10px;max-width:20ch;text-wrap:balance}
+.quote .r{color:var(--red);text-shadow:0 0 40px rgba(232,48,42,.4)}
+
+footer{position:relative;z-index:1;padding:48px 0 0;color:var(--muted);font-size:13px}
+footer h4{font-family:var(--mono);font-weight:500;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+footer ul{padding-left:0;list-style:none;margin:0;columns:2;column-gap:36px}
+footer li{margin:0 0 8px;break-inside:avoid}
+footer a{color:var(--silver);border-bottom-color:var(--edge)}
+
+@media (max-width:1000px){
+  .shell{grid-template-columns:1fr}
+  .rail{position:static;height:auto;padding:22px 18px;border-bottom:1px solid var(--edge)}
+  .rail nav{flex-direction:row;flex-wrap:wrap;gap:6px}
+  .rail nav a{grid-template-columns:auto 1fr;padding:6px 10px}
+  .rail .meta{display:none}
+  main{padding:0 20px 80px}
+  .focus3,.g3,.stack,.tiers,.agenda{grid-template-columns:1fr 1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .ladder{grid-template-columns:repeat(5,minmax(120px,1fr))}
+  .timeline::before{left:99px}
+  .tl{grid-template-columns:72px 56px 1fr}
+  .tl .m b{font-size:18px}
+}
+@media (max-width:620px){
+  .focus3,.g2,.g3,.roles,.stack,.tiers,.agenda,.decide,.kpis{grid-template-columns:1fr}
+  .chead{grid-template-columns:1fr;gap:6px}
+  .item{grid-template-columns:26px 1fr}
+  .item .side{grid-column:2;flex-direction:row;align-items:center}
+  footer ul{columns:1}
+  .tl .ev{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="orbs" aria-hidden="true"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="shell">
+<aside class="rail">
+  <div class="brand">19Keys × High Lvl<b>Operating Deck</b></div>
+  <nav id="nav">
+    <a href="#thesis"><span>00</span>Thesis</a>
+    <a href="#rhythm"><span>01</span>The Rhythm</a>
+    <a href="#cgp"><span>02</span>Creator Growth</a>
+    <a href="#calendar"><span>03</span>15-Month Calendar</a>
+    <a href="#supermind"><span>04</span>Supermind</a>
+    <a href="#hlc"><span>05</span>HLC + PHL</a>
+    <a href="#board"><span>06</span>Open Items</a>
+    <a href="#decide"><span>07</span>The Ask</a>
+    <a href="#pressure"><span>08</span>Pressure Test</a>
+  </nav>
+  <div class="meta">Prepared by B. Amechi<br>For 19Keys<br>v2 · Sept 3, 2026<br>Living document</div>
+</aside>
+
+<main><div class="wrap">
+
+<section class="hero" id="thesis">
+  <p class="eyebrow">Working session · Visionary + Integrator</p>
+  <h1><span class="s">We have enough gold.</span><br><span class="r">Now we execute.</span></h1>
+  <p class="lede">Three focuses. One weekly meeting. Clear ownership. A running agenda we both work from. That is the whole proposal.</p>
+  <div class="focus3">
+    <div class="glass reveal"><span class="chip red tag"><i class="dot"></i>Revenue</span><div class="k">01</div><h3>Creator Growth Program</h3><p>Big fish first. $19K members, a real calendar, partners who bring assets.</p></div>
+    <div class="glass reveal"><span class="chip silver tag">Exit</span><div class="k">02</div><h3>Supermind</h3><p>Lock brand, shows, budget. Then media and affiliates build a sellable company.</p></div>
+    <div class="glass reveal"><span class="chip silver tag">Main thing</span><div class="k">03</div><h3>HLC + Project High Lvl</h3><p>A sponsored Season 6 with new IP. A nonprofit run and funded properly.</p></div>
+  </div>
+</section>
+
+<section class="chapter" id="rhythm">
+  <div class="chead"><div class="num">01</div><div>
+    <h2>The Rhythm</h2>
+    <p>Vision creates the opportunities. Operations converts them. One weekly meeting protects both.</p>
+  </div></div>
+
+  <div class="roles">
+    <div class="glass card reveal"><h5>Visionary</h5><div class="who">19Keys owns</div><ul>
+      <li>The vision, the voice, the relationships that open doors</li>
+      <li>Being the face: stages, shows, podcasts, the room</li>
+      <li>Decisions inside 48 hours</li>
+      <li>New ideas, brought to the meeting and parked or scheduled</li>
+    </ul></div>
+    <div class="glass card reveal"><h5 class="sv">Integrator</h5><div class="who">B. Amechi owns</div><ul>
+      <li>Strategy, operations, deals, the calendar</li>
+      <li>Every approved idea gets a funnel, a budget, an owner</li>
+      <li>Partner and team communication, so Keys is shielded from noise</li>
+      <li>This deck, updated before every meeting</li>
+    </ul></div>
+  </div>
+
+  <h3 class="sub">Weekly · 60 minutes · same day, same time</h3>
+  <div class="agenda">
+    <div class="glass card reveal"><div class="t">0:00</div><div class="n">Scorecard</div><p>CGP closes, Supermind sales, HLC sponsor pipeline, cash.</p></div>
+    <div class="glass card reveal"><div class="t">0:10</div><div class="n">Next 90 days</div><p>Events locked, travel booked, content days set.</p></div>
+    <div class="glass card reveal hot"><div class="t">0:20</div><div class="n">Decisions</div><p>Open Items only. Approved, adjusted, or killed. Nothing carries past two weeks.</p></div>
+    <div class="glass card reveal"><div class="t">0:45</div><div class="n">New ideas</div><p>The parking lot. One line each. Reviewed quarterly.</p></div>
+    <div class="glass card reveal"><div class="t">0:55</div><div class="n">Owners + dates</div><p>Every action gets a name and a day.</p></div>
+  </div>
+  <div class="rules">
+    <span class="chip">Cameras on, phones down</span>
+    <span class="chip">Missed meeting rescheduled inside 48h</span>
+    <span class="chip red"><i class="dot"></i>No decision by next meeting = Integrator's call stands</span>
+    <span class="chip">Quarterly: promote one parking-lot idea</span>
+  </div>
+</section>
+
+<section class="chapter" id="cgp">
+  <div class="chead"><div class="num">02</div><div>
+    <h2>Focus One · Creator Growth</h2>
+    <p>Zion stays the feeder. Effort shifts to the big fish.</p>
+  </div></div>
+
+  <div class="kpis">
+    <div class="glass kpi red reveal"><b>$285K</b><small>15 members × $19K</small><div class="bar"><i style="width:100%"></i></div></div>
+    <div class="glass kpi reveal"><b>$66K</b><small>6 Creator Days × $11K</small><div class="bar"><i style="width:23%"></i></div></div>
+    <div class="glass kpi reveal"><b>4–5</b><small>closes per month target</small></div>
+    <div class="glass kpi reveal"><b>432</b><small>$44 members to equal one $19K</small></div>
+  </div>
+
+  <h4 class="lab">Value ladder · small fish become big fish</h4>
+  <div class="ladder">
+    <div class="glass step s1"><div class="price">Free</div><div class="lbl">Content</div><p>HLC, socials, Keyism book</p></div>
+    <div class="glass step s2"><div class="price">$44</div><div class="lbl">Zion entry</div><p>Community, rooms, passport</p></div>
+    <div class="glass step s3"><div class="price">$144</div><div class="lbl">Zion upper</div><p>Masterclasses, upgrade path</p></div>
+    <div class="glass step s4"><div class="price">$555</div><div class="lbl">Creator Day</div><p>Atlanta mastermind, 20 seats</p></div>
+    <div class="glass step s5 hot"><div class="price">$19K</div><div class="lbl">Creator Growth</div><p>Inner circle. Keys as consultant and amplifier.</p></div>
+  </div>
+
+  <h3 class="sub">What a member gets</h3>
+  <div class="stack">
+    <div class="glass card reveal"><div class="ico">K</div><h6>Access to Keys</h6><p>Quarterly filmed consult. Keys speaks at their event or joins their podcast once a year. Feature consideration on 19Keys platforms.</p><span class="chip amber">Confirm scope</span></div>
+    <div class="glass card reveal"><div class="ico">3</div><h6>Three events a year</h6><p>VIP inner-circle access, filmed mastermind sessions, everything on site. Member covers travel.</p><span class="chip ok"><i class="dot"></i>Calendar below</span></div>
+    <div class="glass card reveal"><div class="ico">Z</div><h6>Private room in Zion</h6><p>Elite 15–20 Creator Growth room, plus two Creator Day seats a year.</p><span class="chip ok"><i class="dot"></i>Ready</span></div>
+    <div class="glass card reveal hot"><div class="ico">F</div><h6>Factory Club, LA</h6><p>Curated circle, private salons, Factory HQ workspace, accredited deal flow.</p><span class="chip red"><i class="dot"></i>Keys to confirm with Keenan</span></div>
+    <div class="glass card reveal"><div class="ico">M</div><h6>Media</h6><p>Recap reels and personal clips from every event, by High Lvl Media.</p><span class="chip ok"><i class="dot"></i>Ready</span></div>
+    <div class="glass card reveal"><div class="ico">$</div><h6>Financing</h6><p>Education payment plan via Antoine's provider. Soft credit check, ~1–5% fee.</p><span class="chip amber">Confirm before launch</span></div>
+  </div>
+
+  <div class="g2" style="margin-top:14px">
+    <div class="glass card hot reveal"><h5>Flag · Factory Club numbers</h5><div class="big">$10K <span style="color:var(--muted);font-size:22px">→</span> $8.5K<span style="font-size:18px;color:var(--muted)"> /mo</span></div><p>Working understanding of list rate versus the Keys referral rate. The $2.5K gap is Keenan Beasley's partner contribution. Factory publishes no pricing. Nothing reaches a prospect until Keys confirms.</p></div>
+    <div class="glass card reveal"><h5 class="sv">Partner-members · assets instead of cash</h5><ul>
+      <li><span><strong>Keenan Beasley / Factory</strong> — the club discount and the LA campus for November</span></li>
+      <li><span><strong>Crystal / Peace on the Pond</strong> — discounted estate for Atlanta events, shared % of sales. <a href="https://peaceonponddeck.vercel.app/" target="_blank" rel="noopener">Deck awaiting Keys</a></span></li>
+    </ul></div>
+  </div>
+
+  <h3 class="sub">Creator Day revenue · two lanes per event</h3>
+  <div class="tiers">
+    <div class="glass card reveal"><h5 class="sv">Seats</h5><div class="big">$555</div><p>20 seats. Strategy in session, content on the grounds. Working model already on the Peace on the Pond deck.</p></div>
+    <div class="glass card hot reveal"><h5>Sponsor tier · proposed</h5><div class="big red">$2.5K–$5K</div><p>Per event, scaled to the event. Sponsor leads a segment, gets filmed with Keys and the room, receives the content package. One or two sponsors per Creator Day.</p></div>
+    <div class="glass card reveal"><h5 class="sv">Per-event math</h5><div class="big">$11K <span style="color:var(--muted);font-size:20px">→</span> $16K+</div><p>Seats alone versus seats plus one sponsor. Sponsor revenue clears the $4,750 travel and production line before a single seat sells.</p></div>
+  </div>
+  <p class="note">Funnel: HLC episode → Creator Day at $555 (filmed, application link on every recap) → consult → $19K offer → member becomes a listed leader on the platform.</p>
+  <div class="glass card hot reveal" style="margin-top:14px"><h5>Flag · 19keys.com/creator returns a 404</h5><p>Public program page is down mid-rebuild. Every CGP content push points here. Restore first.</p></div>
+</section>
+
+<section class="chapter" id="calendar">
+  <div class="chead"><div class="num">03</div><div>
+    <h2>15-Month Calendar</h2>
+    <p>One High Lvl event every month. Red is set or in motion. Dashed is open: a Creator Growth mastermind at a partner location.</p>
+  </div></div>
+  <div class="timeline">
+    <div class="tl set"><div class="m"><b>Sep</b>2026</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>New York</h6><p>Ethiopian delegation invitation, plus Keys' own NY agenda.</p></div><span class="chip red"><i class="dot"></i>Needs Keys' word</span></div></div>
+    <div class="tl set"><div class="m"><b>Oct</b>2026</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>London · Netherlands</h6><p>European run. Partner venues and a filmed mastermind to book.</p></div><span class="chip amber">Book venues</span></div></div>
+    <div class="tl set"><div class="m"><b>Nov</b>2026</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Los Angeles · Factory</h6><p>Factory event and media day. B. Amechi may be in Egypt on the Phoenix event; exploring access for Keys.</p></div><span class="chip amber">Confirm campus</span></div></div>
+    <div class="tl open"><div class="m"><b>Dec</b>2026</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open · partner location</h6><p>Atlanta is the default.</p></div><span class="chip">Mastermind</span></div></div>
+    <div class="tl set"><div class="m"><b>Jan</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Ethiopia</h6><p>11-day expedition, Jan 5–15, with a private in-trip mastermind.</p></div><span class="chip ok"><i class="dot"></i>Set</span></div></div>
+    <div class="tl open"><div class="m"><b>Feb</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open · candidate NAREB, Arizona</h6><p>If the speaking slot lands.</p></div><span class="chip">Mastermind</span></div></div>
+    <div class="tl open"><div class="m"><b>Mar</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open · partner location</h6><p>Peace on the Pond or next partner venue.</p></div><span class="chip">Mastermind</span></div></div>
+    <div class="tl open"><div class="m"><b>Apr</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open · partner location</h6><p>Peace on the Pond or next partner venue.</p></div><span class="chip">Mastermind</span></div></div>
+    <div class="tl open"><div class="m"><b>May</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open · Keys' birthday month</h6><p>Candidate for a flagship LA gathering.</p></div><span class="chip">Flagship</span></div></div>
+    <div class="tl open"><div class="m"><b>Jun</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open · partner location</h6><p>Peace on the Pond or next partner venue.</p></div><span class="chip">Mastermind</span></div></div>
+    <div class="tl open"><div class="m"><b>Jul</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open · partner location</h6><p>Peace on the Pond or next partner venue.</p></div><span class="chip">Mastermind</span></div></div>
+    <div class="tl set"><div class="m"><b>Aug</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Atlanta · InvestFest</h6><p>Repeat the 2026 play: estate block, keynote, mastermind.</p></div><span class="chip ok"><i class="dot"></i>Annual</span></div></div>
+    <div class="tl open"><div class="m"><b>Sep</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open</h6><p>Set at the Q2 review.</p></div><span class="chip">Q2 review</span></div></div>
+    <div class="tl open"><div class="m"><b>Oct</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open</h6><p>Set at the Q2 review.</p></div><span class="chip">Q2 review</span></div></div>
+    <div class="tl open"><div class="m"><b>Nov</b>2027</div><div class="pt"><i></i></div><div class="glass ev"><div><h6>Open</h6><p>Set at the Q2 review.</p></div><span class="chip">Q2 review</span></div></div>
+  </div>
+</section>
+
+<section class="chapter" id="supermind">
+  <div class="chead"><div class="num">04</div><div>
+    <h2>Focus Two · Supermind</h2>
+    <p>A sellable brand holds still longer than a quarter. The machine is built. It waits on three locked answers.</p>
+  </div></div>
+
+  <div class="kpis">
+    <div class="glass kpi reveal"><b>$21.5K</b><small>affiliate sales · Aug 2026</small></div>
+    <div class="glass kpi reveal"><b>23</b><small>active affiliates</small></div>
+    <div class="glass kpi red reveal"><b>428</b><small>website sessions · the constraint</small></div>
+    <div class="glass kpi reveal"><b>42%</b><small>of program from one top performer</small></div>
+  </div>
+
+  <h3 class="sub">The alignment meeting · three decisions, one sitting</h3>
+  <div class="g3">
+    <div class="glass card hot reveal"><h5>1 · Brand</h5><div class="big">A <span style="color:var(--muted);font-size:22px">or</span> B</div><p><strong>A, The Supers:</strong> bright red, playful, sells today, looks like RYZE.</p><p><strong>B, 007:</strong> heritage, ritual, black and gold and crimson. Keys' own vision.</p><p>On the table: B as master identity, The Supers as capsule campaigns. Locked 90 days.</p></div>
+    <div class="glass card reveal"><h5 class="sv">2 · Shows</h5><div class="big">5 <span style="color:var(--muted);font-size:22px">→</span> 2</div><p>Coffee Shop Show, Intellectual Profiles, A Day With, Coffee Conversations, How To Be A Player. Each its own channel, its own valuation. Pick the two that run first.</p></div>
+    <div class="glass card reveal"><h5 class="sv">3 · Budget</h5><div class="big">$3.5K <span style="color:var(--muted);font-size:22px">or</span> $6.3K</div><p><strong>Lean</strong> $3,550/mo. <strong>Ideal</strong> $6,300/mo: 6–8 long-form episodes, 40–48 clips, two shows live. Choose the scenario and the source of funds.</p></div>
+  </div>
+
+  <div class="g2" style="margin-top:14px">
+    <div class="glass card reveal"><h5 class="sv">Affiliate army · once locked</h5><ul>
+      <li><span><strong>T0 Member</strong> 10% web · 15% TikTok, automatic</span></li>
+      <li><span><strong>T1 Creator</strong> 15% · 20%, unlocks at $400 in 30 days</span></li>
+      <li><span><strong>T2 Partner</strong> 20% · 25% + card, unlocks at $1K in 30 days</span></li>
+      <li><span><strong>T3 Flagship</strong> 25–30%, invitation only</span></li>
+    </ul></div>
+    <div class="glass card reveal"><h5 class="sv">Day-90 targets</h5><ul>
+      <li><span><strong>15</strong> active affiliates, <strong>$1,500/mo</strong> attributed, running without a single face</span></li>
+      <li><span><strong>15–25</strong> already-producing creators seeded per month</span></li>
+      <li><span><strong>$1,000</strong> paid test to learn true CAC. Kill above $50</span></li>
+      <li><span>Exit thesis: media IP + subscriptions + athlete-investor at the front. Jaylen Brown is the north star.</span></li>
+    </ul></div>
+  </div>
+  <p class="note">Working docs: <a href="https://super-marketingx-affiliate.vercel.app/" target="_blank" rel="noopener">brand, shows, budget</a> · <a href="https://superminddeck.vercel.app/" target="_blank" rel="noopener">creator network and affiliates</a></p>
+</section>
+
+<section class="chapter" id="hlc">
+  <div class="chead"><div class="num">05</div><div>
+    <h2>Focus Three · HLC + PHL</h2>
+    <p>HLC built the audience every other focus draws from. It gets investment and a sponsor. PHL gets run like the 501(c)(3) it is.</p>
+  </div></div>
+
+  <div class="kpis">
+    <div class="glass kpi reveal"><b>107</b><small>conversations · 7 pillars</small></div>
+    <div class="glass kpi red reveal"><b>60M+</b><small>views on EYL's channel</small></div>
+    <div class="glass kpi reveal"><b>6M</b><small>podcast downloads</small></div>
+    <div class="glass kpi reveal"><b>S6</b><small>needs a sponsor</small></div>
+  </div>
+
+  <div class="g2" style="margin-top:14px">
+    <div class="glass card reveal"><h5>High-Lvl Conversations · Season 6</h5><ul>
+      <li><span><strong>Rate card.</strong> Four lanes exist (episode partnerships, product placement, live experiences, guest appearances). They need prices and a title-sponsor package.</span></li>
+      <li><span><strong>Keyism Edition card game.</strong> Live at $88 pre-order, 107 cards. A product, a live segment, and a sponsor activation in one.</span></li>
+      <li><span><strong>New season concepts.</strong> Live HLC in each calendar city, a card-game episode format, a partner-sponsored arc.</span></li>
+      <li><span><strong>Jason's proposal</strong> (Keys, EYL, Ian) is the first live sponsor conversation.</span></li>
+    </ul></div>
+    <div class="glass card reveal"><h5 class="sv">Project High Lvl · run it right</h5><ul>
+      <li><span>501(c)(3), Los Angeles, est. Dec 2024. Thesis: AI literacy is the new financial literacy.</span></li>
+      <li><span>Four programs: Lab, Day, Outside, Academy. Academy revenue funds free seats.</span></li>
+      <li><span>Giving tiers live: $250 · $1,000 · $10,000 · monthly · "$50 puts one person in the room".</span></li>
+      <li><span><strong>Asks:</strong> quarterly board, published impact report, grant calendar, corporate sponsorship deck. Every HLC sponsor gets a PHL give-back line.</span></li>
+    </ul></div>
+  </div>
+  <p class="note">Funnel: HLC episode → card game and Keyism book → Zion → Creator Day → Creator Growth. HLC sponsor → PHL donor → Academy corporate contract.</p>
+</section>
+
+<section class="chapter" id="board">
+  <div class="chead"><div class="num">06</div><div>
+    <h2>Open Items</h2>
+    <p>The running agenda. Added as they come up, decided in the weekly, checked off here. Checkmarks save on this device.</p>
+  </div></div>
+
+  <div class="boardhead"><h4 class="lab">Needs a decision now</h4><small>Updated Sept 3, 2026</small></div>
+  <div class="board">
+    <div class="glass item hot" data-id="potp"><input type="checkbox" aria-label="Done"><div><div class="title">Approve or adjust the Peace on the Pond deck</div><div class="why">Crystal's team is holding dates. Terms: $555 × 20 seats, sponsor tier at $2.5K–$5K, expenses off the top, 50/50 split, $2,500 floor for the estate, six gatherings in Season One.</div><div class="own">OWNER · KEYS</div></div><div class="side"><span class="chip red"><i class="dot"></i>Due today</span></div></div>
+    <div class="glass item" data-id="ny"><input type="checkbox" aria-label="Done"><div><div class="title">New York in September · Ethiopian delegation</div><div class="why">Invitation to meet the delegation in NY, which feeds the January expedition. Need a yes and dates to book travel and a filmed mastermind.</div><div class="own">OWNER · KEYS</div></div><div class="side"><span class="chip red"><i class="dot"></i>This week</span></div></div>
+    <div class="glass item" data-id="brand"><input type="checkbox" aria-label="Done"><div><div class="title">Approve Supermind branding direction</div><div class="why">Pathway B as master identity with The Supers as capsules, or stay with A. Locks 90 days. Unblocks the whole media and affiliate plan.</div><div class="own">OWNER · KEYS</div></div><div class="side"><span class="chip red"><i class="dot"></i>Decision</span></div></div>
+    <div class="glass item" data-id="factory"><input type="checkbox" aria-label="Done"><div><div class="title">Confirm Factory Club terms with Keenan</div><div class="why">Is the ~$8.5K/mo referral rate real, and can it be written into the CGP offer? Confirm the November LA media day on campus.</div><div class="own">OWNER · KEYS</div></div><div class="side"><span class="chip amber">Waiting on Keys</span></div></div>
+  </div>
+
+  <div class="boardhead"><h4 class="lab">Plan together</h4><small>Approach, then schedule</small></div>
+  <div class="board">
+    <div class="glass item" data-id="jason"><input type="checkbox" aria-label="Done"><div><div class="title">Jason's sponsorship proposal · Keys, EYL, Ian</div><div class="why">Reschedule. Before it: what we want (HLC S6 title sponsor, PHL give-back line, Supermind placement), what we will and will not give, who leads.</div><div class="own">OWNER · B. AMECHI</div></div><div class="side"><span class="chip">Plan</span></div></div>
+    <div class="glass item" data-id="cal"><input type="checkbox" aria-label="Done"><div><div class="title">Lock the 15-month calendar</div><div class="why">Confirm the five red months, name partner venues for the open ones, agree the travel policy.</div><div class="own">OWNER · BOTH</div></div><div class="side"><span class="chip">Two weeks</span></div></div>
+    <div class="glass item" data-id="align"><input type="checkbox" aria-label="Done"><div><div class="title">Book the Supermind alignment meeting</div><div class="why">Ninety minutes. Brand, shows, budget. Both decks open. Nothing else on the agenda.</div><div class="own">OWNER · B. AMECHI</div></div><div class="side"><span class="chip">This week</span></div></div>
+  </div>
+
+  <div class="boardhead"><h4 class="lab">Content to push</h4><small>Each needs Keys on camera</small></div>
+  <div class="board">
+    <div class="glass item" data-id="a19"><input type="checkbox" aria-label="Done"><div><div class="title">A19 clothing</div><div class="why">Status unknown. Live, paused, or folded into HLC merch with the card game. Then one content moment or none.</div><div class="own">OWNER · KEYS</div></div><div class="side"><span class="chip amber">Status check</span></div></div>
+    <div class="glass item" data-id="keyism"><input type="checkbox" aria-label="Done"><div><div class="title">Keyism book</div><div class="why">Series pairing the book with the Keyism Edition card game. Every clip links to Zion.</div><div class="own">OWNER · HIGH LVL MEDIA</div></div><div class="side"><span class="chip">Filming day</span></div></div>
+    <div class="glass item" data-id="cgpcontent"><input type="checkbox" aria-label="Done"><div><div class="title">Creator Growth Program</div><div class="why">Filmed consult clips, member testimonials, Atlanta Creator Day trailer.</div><div class="own">OWNER · HIGH LVL MEDIA</div></div><div class="side"><span class="chip amber">Blocked · page 404</span></div></div>
+  </div>
+</section>
+
+<section class="chapter" id="decide">
+  <div class="chead"><div class="num">07</div><div>
+    <h2>The Ask</h2>
+    <p>Six yeses. Everything else follows.</p>
+  </div></div>
+  <div class="decide">
+    <div class="glass card reveal"><div class="n">1</div><div><b>Three focuses, nothing else this quarter</b><p>New ideas go to the parking lot, reviewed quarterly.</p></div></div>
+    <div class="glass card reveal"><div class="n">2</div><div><b>A weekly 60 minutes that does not move</b><p>Same day, same time. Missed sessions rescheduled inside 48 hours.</p></div></div>
+    <div class="glass card reveal"><div class="n">3</div><div><b>Decisions in 48 hours</b><p>Or the Integrator's recommendation stands. Speed is the advantage.</p></div></div>
+    <div class="glass card reveal hot"><div class="n">4</div><div><b>Peace on the Pond, today</b><p>Approve, or mark the changes, so Crystal's team can hold dates.</p></div></div>
+    <div class="glass card reveal"><div class="n">5</div><div><b>Supermind alignment meeting this week</b><p>Brand, shows, budget. Locked for 90 days.</p></div></div>
+    <div class="glass card reveal"><div class="n">6</div><div><b>The calendar gets your yes</b><p>New York, London/Netherlands, Los Angeles, Ethiopia, InvestFest. Open months fill with partner venues.</p></div></div>
+  </div>
+  <p class="quote">Vision made the opportunities. <span class="r">Structure</span> is how we cash them.</p>
+</section>
+
+<section class="chapter" id="pressure">
+  <div class="chead"><div class="num">08</div><div>
+    <h2>Pressure Test</h2>
+    <p>The strongest case against this plan, answered before the market asks.</p>
+  </div></div>
+  <div class="g2">
+    <div class="glass card reveal"><h5>Big fish before the pond is full</h5><p>Fifteen $19K buyers assumes a pipeline that does not exist yet. <strong>Answer:</strong> the calendar and Creator Days are the pipeline, and Zion keeps its monthly promo cadence.</p></div>
+    <div class="glass card reveal"><h5>Three focuses is still nine workstreams</h5><p>Two people. <strong>Answer:</strong> sequence inside the quarter. September is Peace on the Pond, New York, and Supermind alignment. Everything else waits.</p></div>
+    <div class="glass card reveal"><h5>Perks we cannot yet promise</h5><p>Factory terms unconfirmed, consult scope unwritten, travel-at-cost feels hidden at $19K. <strong>Answer:</strong> nothing enters a sales call until it is in writing; price positioned with travel explicitly excluded.</p></div>
+    <div class="glass card reveal"><h5>Structure can feel like a cage</h5><p>If the weekly reads as control, it dies in a month. <strong>Answer:</strong> the parking lot is real, the quarterly promotes one idea by design, Keys keeps final say.</p></div>
+    <div class="glass card reveal"><h5>Supermind is the slowest money</h5><p>$21.5K on 428 sessions is a traffic problem, and premium rebrands narrow before they widen. <strong>Answer:</strong> ideal budget only with the 90-day contract signed; sessions on the weekly scorecard.</p></div>
+    <div class="glass card reveal"><h5>HLC lives on a channel we do not own</h5><p>Sponsors will ask about owned reach. <strong>Answer:</strong> sell Season 6 with Zion, the card game, and live events as owned inventory; the podcast feed as the owned number.</p></div>
+  </div>
+</section>
+
+<footer>
+  <h4>Sources</h4>
+  <ul>
+    <li><a href="https://factory-keys.vercel.app/" target="_blank" rel="noopener">19keys.com/dynasty</a> · style reference</li>
+    <li><a href="https://19keys.com/creator" target="_blank" rel="noopener">19keys.com/creator</a> · 404 as of Sept 3, 2026</li>
+    <li><a href="https://hlc-phi.vercel.app/" target="_blank" rel="noopener">19keys.com/hlc</a> · 107 conversations, Season 5, Keyism Edition $88</li>
+    <li><a href="https://phl-v2.vercel.app/" target="_blank" rel="noopener">19keys.com/phl</a> · 501(c)(3), programs, giving tiers</li>
+    <li><a href="https://thefactoryhq.com/club/overview" target="_blank" rel="noopener">Factory Club</a> · no pricing published</li>
+    <li><a href="https://peaceonponddeck.vercel.app/" target="_blank" rel="noopener">Creator Growth ATL × Peace on the Pond</a></li>
+    <li><a href="https://super-marketingx-affiliate.vercel.app/" target="_blank" rel="noopener">Supermind strategy portal</a></li>
+    <li><a href="https://superminddeck.vercel.app/" target="_blank" rel="noopener">Supermind affiliate program</a> · Aug 2026 metrics</li>
+    <li>Internal notes: CGP targets, Zion tiers, Ethiopia dates, HLC audience figures</li>
+  </ul>
+</footer>
+
+</div></main>
+</div>
+
+<script>
+(function(){
+  var KEY='enough-gold-items',saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){saved={};}
+  document.querySelectorAll('.item').forEach(function(it){
+    var id=it.getAttribute('data-id'),cb=it.querySelector('input');
+    if(saved[id]){cb.checked=true;it.classList.add('done');}
+    cb.addEventListener('change',function(){
+      it.classList.toggle('done',cb.checked);saved[id]=cb.checked;
+      try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}
+    });
+  });
+  var links=document.querySelectorAll('#nav a');
+  var secs=Array.prototype.map.call(links,function(a){return document.querySelector(a.getAttribute('href'));});
+  function mark(){var y=window.scrollY+180,cur=0;secs.forEach(function(s,i){if(s&&s.offsetTop<=y)cur=i;});links.forEach(function(a,i){a.classList.toggle('active',i===cur);});}
+  window.addEventListener('scroll',mark,{passive:true});mark();
+  if('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var els=document.querySelectorAll('.reveal');
+    els.forEach(function(el){if(el.getBoundingClientRect().top>window.innerHeight)el.classList.add('pre');});
+    var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});
+    els.forEach(function(el){io.observe(el);});
+  }
+})();
+</script>
+</body>
+</html>
